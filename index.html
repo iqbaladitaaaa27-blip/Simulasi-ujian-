@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulasi Ujian Exambro</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,Arial,sans-serif;background:#f3f5f9;color:#182230;margin:0;padding:20px}
+main{max-width:650px;margin:24px auto;background:white;padding:24px;border-radius:16px;box-shadow:0 8px 28px #17203314}
+h1{font-size:1.4rem;margin-top:0}p{line-height:1.5}.muted{color:#64748b;font-size:.92rem}
+input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;margin:8px 0 14px;font:inherit}
+button{background:#2457d6;color:white;border:0;border-radius:9px;padding:12px 16px;font:inherit;font-weight:600}
+button:disabled{opacity:.5}.top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.question{padding:16px 0;border-top:1px solid #e2e8f0}.option{display:block;padding:9px 0}
+#exam,#result{display:none}.timer{font-weight:700;background:#eef2ff;padding:8px 12px;border-radius:9px}
+</style>
+</head>
+<body>
+<main>
+<section id="login">
+<h1>Simulasi Ujian</h1>
+<p class="muted">Halaman demo untuk menguji apakah browser ujian dapat membuka halaman web biasa. Tidak terhubung ke sekolah atau sistem ujian sungguhan.</p>
+<label for="student">Nama peserta</label>
+<input id="student" placeholder="Masukkan nama" maxlength="40">
+<button id="start">Mulai simulasi</button>
+</section>
+<section id="exam">
+<div class="top"><strong>Ujian Demo</strong><span class="timer" id="timer">05:00</span></div>
+<p class="muted" id="welcome"></p>
+<form id="quiz">
+<div class="question"><strong>1. Berapa hasil 2 + 3?</strong>
+<label class="option"><input type="radio" name="q1" value="A"> A. 4</label>
+<label class="option"><input type="radio" name="q1" value="B"> B. 5</label>
+<label class="option"><input type="radio" name="q1" value="C"> C. 6</label></div>
+<div class="question"><strong>2. Warna langit cerah pada siang hari biasanya?</strong>
+<label class="option"><input type="radio" name="q2" value="A"> A. Biru</label>
+<label class="option"><input type="radio" name="q2" value="B"> B. Hijau</label>
+<label class="option"><input type="radio" name="q2" value="C"> C. Ungu</label></div>
+<div class="question"><strong>3. Perangkat untuk membuka halaman web disebut?</strong>
+<label class="option"><input type="radio" name="q3" value="A"> A. Browser</label>
+<label class="option"><input type="radio" name="q3" value="B"> B. Speaker</label>
+<label class="option"><input type="radio" name="q3" value="C"> C. Scanner</label></div>
+<button type="submit">Kumpulkan jawaban</button>
+</form>
+</section>
+<section id="result"><h1>Simulasi selesai</h1><p id="score"></p><p class="muted">Ini hanya demo lokal statis. Tidak merekam aktivitas perangkat, perpindahan aplikasi, atau upaya keluar dari Exambro.</p><button onclick="location.reload()">Ulangi</button></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);let remaining=300,clock;
+$('start').addEventListener('click',()=>{
+ const name=$('student').value.trim();if(!name){alert('Isi nama peserta dulu.');return;}
+ $('welcome').textContent='Peserta: '+name;$('login').style.display='none';$('exam').style.display='block';
+ clock=setInterval(()=>{remaining--;const m=String(Math.floor(remaining/60)).padStart(2,'0'),s=String(remaining%60).padStart(2,'0');$('timer').textContent=m+':'+s;if(remaining<=0){clearInterval(clock);finish();}},1000);
+});
+function finish(){clearInterval(clock);const data=new FormData($('quiz'));let score=0;if(data.get('q1')==='B')score++;if(data.get('q2')==='A')score++;if(data.get('q3')==='A')score++;$('exam').style.display='none';$('result').style.display='block';$('score').textContent='Nilai demo: '+score+' dari 3 soal.';}
+$('quiz').addEventListener('submit',e=>{e.preventDefault();finish();});
+</script>
+</body></html>
